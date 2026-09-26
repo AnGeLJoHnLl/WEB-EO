@@ -298,7 +298,7 @@ class RadioPlayer {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: this.currentStation.name,
         artist: this.currentStation.dial + " • " + this.currentStation.genreLabel,
-        album: "Perú Lounge & Radios",
+        album: "WEB.EO - Radios del Perú",
         artwork: [
           {
             src: "https://raw.githubusercontent.com/feathericons/feather/master/icons/radio.svg",

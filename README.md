@@ -1,6 +1,6 @@
-# 🇵🇪 Perú Lounge & Arcade
+# 🕹️ WEB.EO - Sala de Entretenimiento (Radios Peruanas & Arcade)
 
-Una sala de entretenimiento web interactiva que reúne las **principales radios peruanas en vivo** junto con una **sala de minijuegos retro y arcade**, diseñada para funcionar tanto en computadoras como en dispositivos móviles (Android / iOS).
+**WEB.EO** es una sala de entretenimiento web interactiva que reúne las **principales radios peruanas en vivo** junto con una **sala de minijuegos retro y arcade**, diseñada para funcionar tanto en computadoras como en dispositivos móviles (Android / iOS).
 
 ---
 
