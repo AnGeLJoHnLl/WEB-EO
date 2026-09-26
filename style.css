@@ -1124,8 +1124,445 @@ canvas {
   margin-top: 6px;
 }
 
+/* El Ídolo: Modo Carrera Futbolista */
+.idolo-game-container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.idolo-card-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.setup-box {
+  max-width: 650px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.idolo-hero-header h2 {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.idolo-hero-header p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.idolo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+  margin-top: 24px;
+}
+
+.idolo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.idolo-field label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.idolo-field input, .idolo-field select {
+  background: #090a12;
+  border: 1px solid var(--border-subtle);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.idolo-field input:focus, .idolo-field select:focus {
+  border-color: #22e748;
+}
+
+.idolo-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.idolo-start-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #22e748, #0582ca);
+  color: #000;
+  font-weight: 800;
+}
+
+/* Dashboard Carrera */
+.idolo-dashboard-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.player-card-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: linear-gradient(155deg, rgba(18, 26, 36, 0.9), rgba(10, 12, 22, 0.95));
+  border-color: rgba(34, 231, 72, 0.35);
+}
+
+.player-hud-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+}
+
+.player-ovr-badge {
+  width: 58px;
+  height: 58px;
+  border: 2px solid;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.ovr-num {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.ovr-lbl {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.player-identity h3 {
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.player-identity p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.tag-pos {
+  background: rgba(0, 242, 254, 0.15);
+  color: var(--neon-cyan);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.tag-club {
+  color: #22e748 !important;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.btn-micro {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.player-meters-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.meter-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.meter-bar {
+  height: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.meter-fill.energy { background: linear-gradient(90deg, #ffbe0b, #06d6a0); }
+.meter-fill.fame { background: linear-gradient(90deg, #00f2fe, #ff007f); }
+.meter-fill.disc { background: linear-gradient(90deg, #3a86ff, #9d4edd); }
+
+.player-stats-counter {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 12px 10px;
+  border-radius: 10px;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-box span {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.stat-box strong {
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.achievement-pill {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  background: rgba(255, 209, 102, 0.15);
+  color: #ffd166;
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  text-align: center;
+  font-weight: 700;
+}
+
+.achievement-pill.gold {
+  background: linear-gradient(135deg, rgba(255, 209, 102, 0.25), rgba(255, 0, 127, 0.25));
+  border-color: #ffd166;
+  box-shadow: 0 0 15px rgba(255, 209, 102, 0.25);
+}
+
+.action-hub {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.season-ready-box h3 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.season-ready-box p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.decision-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.choice-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 16px 12px;
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: var(--transition);
+}
+
+.choice-card:hover {
+  border-color: var(--neon-cyan);
+  background: rgba(0, 242, 254, 0.1);
+  transform: translateY(-2px);
+}
+
+.choice-card .icon {
+  font-size: 26px;
+}
+
+.choice-card small {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.play-season-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.05rem;
+  background: linear-gradient(135deg, #22e748, #0582ca);
+  color: #000;
+  font-weight: 800;
+}
+
+/* Evento Activo */
+.event-active-box {
+  background: rgba(255, 0, 127, 0.05);
+  border: 1px solid rgba(255, 0, 127, 0.3);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.badge-alert {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  background: rgba(255, 0, 127, 0.2);
+  color: var(--neon-pink);
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.event-title {
+  font-size: 1.35rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.event-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.event-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.event-opt-button {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  padding: 13px 18px;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 0.94rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.event-opt-button:hover {
+  background: rgba(255, 0, 127, 0.15);
+  border-color: var(--neon-pink);
+  transform: translateX(4px);
+}
+
+.history-box h4 {
+  font-size: 0.95rem;
+  color: var(--neon-cyan);
+  margin-bottom: 10px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-item {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding-bottom: 4px;
+}
+
+/* Pantalla de Retiro */
+.retirement-box {
+  text-align: center;
+  padding: 40px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.statue-glow {
+  font-size: 72px;
+  filter: drop-shadow(0 0 20px rgba(255, 209, 102, 0.6));
+  margin-bottom: 12px;
+}
+
+.idolo-summary-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 22px;
+  max-width: 520px;
+  margin: 20px auto 0;
+}
+
+.idolo-summary-card h4 {
+  font-size: 1.1rem;
+  color: var(--neon-cyan);
+  margin-bottom: 12px;
+}
+
+.summary-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  text-align: left;
+}
+
+.summary-stats-grid span {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.summary-stats-grid strong {
+  color: #fff;
+}
+
 /* Responsividad Móvil */
 @media (max-width: 768px) {
+  .idolo-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .idolo-row-2 {
+    grid-template-columns: 1fr;
+  }
   .header-container {
     justify-content: center;
   }

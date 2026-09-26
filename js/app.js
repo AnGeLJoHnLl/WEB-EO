@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.game2048 = new Game2048("grid-2048");
   window.triviaGame = new TriviaGame();
   window.memoryGame = new MemoryGame("memory-grid");
+  window.idoloGame = new IdoloGame("idolo-game-container");
 
   // Estado de Filtros de Radio
   let currentGenreFilter = "all";
@@ -232,14 +233,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetModal = document.getElementById(`game-view-${gameId}`);
       if (targetModal) {
         targetModal.style.display = "flex";
-        // Cargar iframe de El Ídolo al abrir
-        if (gameId === "idolo") {
-          const frame = document.getElementById("idolo-game-frame");
-          if (frame && (!frame.src || frame.src === "" || frame.src === window.location.href)) {
-            frame.src = frame.dataset.src;
-          }
-        }
-        // Inicializar/Comenzar juego específico
+        // Renderizar/Comenzar juego específico
+        if (gameId === "idolo") window.idoloGame.render();
         if (gameId === "snake") window.snakeGame.start();
         if (gameId === "tetris") window.tetrisGame.start();
         if (gameId === "2048") window.game2048.restart();
