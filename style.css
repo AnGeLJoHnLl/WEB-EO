@@ -1100,44 +1100,6 @@ canvas {
   color: var(--neon-cyan);
 }
 
-/* Vista "Acerca de" / Guía GitHub */
-.about-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-.about-card h2 {
-  font-size: 1.6rem;
-  color: #fff;
-  margin-bottom: 12px;
-}
-
-.about-card h3 {
-  font-size: 1.15rem;
-  color: var(--neon-cyan);
-  margin-top: 20px;
-  margin-bottom: 8px;
-}
-
-.about-card ol, .about-card ul {
-  padding-left: 24px;
-  margin-bottom: 16px;
-  color: var(--text-muted);
-}
-
-.about-card code {
-  background: rgba(0, 0, 0, 0.4);
-  color: var(--neon-pink);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: monospace;
-}
-
 .empty-state {
   text-align: center;
   padding: 48px 20px;
