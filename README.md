@@ -39,11 +39,12 @@
 ### 🕹️ 2. Sala de Juegos Arcade
 Todos los juegos se ejecutan directamente en el navegador sin instalar nada, con controles adaptados para teclado de PC y mandos táctiles en pantalla para celulares:
 
-1. **🐍 Culebrita Neon (Snake Arcade):** Gráficos neón, frutas con multiplicadores, aceleración progresiva y tabla de récord.
-2. **🧱 Tetris Retro:** Matriz 10x20 clásica, indicador de pieza siguiente, sombra de caída fantasma (ghost piece), niveles y filas récord.
-3. **🔢 2048 Huarique:** Desliza fichas con flechas o deslizando con el dedo (swipes táctiles), opción de deshacer movimiento (Undo) y puntuación récord.
-4. **🇵🇪 Trivia Peruana de Oro:** Banco de preguntas sobre gastronomía, historia incaica, cultura, música y jergas cotidianas, con temporizador de 15 segundos y racha de aciertos.
-5. **🎴 Memoria Criolla:** Encuentra las parejas de cartas con íconos de la cultura peruana (Ceviche, Lomo Saltado, Machu Picchu, Torito de Pucará, Cajón Peruano, etc.).
+1. **⚽ El Ídolo (Modo Carrera Futbolista):** El aclamado juego de Potrero Fútbol. Empieza a los 16 años, ficha por clubes, define partidos, gana títulos y conviértete en leyenda.
+2. **🐍 Culebrita Neon (Snake Arcade):** Gráficos neón, frutas con multiplicadores, aceleración progresiva y tabla de récord.
+3. **🧱 Tetris Retro:** Matriz 10x20 clásica, indicador de pieza siguiente, sombra de caída fantasma (ghost piece), niveles y filas récord.
+4. **🔢 2048 Huarique:** Desliza fichas con flechas o deslizando con el dedo (swipes táctiles), opción de deshacer movimiento (Undo) y puntuación récord.
+5. **🇵🇪 Trivia Peruana de Oro:** Banco de preguntas sobre gastronomía, historia incaica, cultura, música y jergas cotidianas, con temporizador de 15 segundos y racha de aciertos.
+6. **🎴 Memoria Criolla:** Encuentra las parejas de cartas con íconos de la cultura peruana (Ceviche, Lomo Saltado, Machu Picchu, Torito de Pucará, Cajón Peruano, etc.).
 
 ---
 

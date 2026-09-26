@@ -458,6 +458,17 @@ body {
   box-shadow: 0 12px 30px rgba(0, 242, 254, 0.2);
 }
 
+.featured-game-card {
+  border-color: rgba(34, 231, 72, 0.35);
+  background: linear-gradient(145deg, rgba(34, 231, 72, 0.06), var(--bg-card));
+  box-shadow: 0 4px 20px rgba(34, 231, 72, 0.08);
+}
+
+.featured-game-card:hover {
+  border-color: #22e748;
+  box-shadow: 0 12px 32px rgba(34, 231, 72, 0.25);
+}
+
 .game-card-icon {
   font-size: 40px;
 }

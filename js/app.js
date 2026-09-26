@@ -232,6 +232,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetModal = document.getElementById(`game-view-${gameId}`);
       if (targetModal) {
         targetModal.style.display = "flex";
+        // Cargar iframe de El Ídolo al abrir
+        if (gameId === "idolo") {
+          const frame = document.getElementById("idolo-game-frame");
+          if (frame && (!frame.src || frame.src === "" || frame.src === window.location.href)) {
+            frame.src = frame.dataset.src;
+          }
+        }
         // Inicializar/Comenzar juego específico
         if (gameId === "snake") window.snakeGame.start();
         if (gameId === "tetris") window.tetrisGame.start();
