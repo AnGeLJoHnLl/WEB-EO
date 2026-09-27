@@ -9,9 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inicializar Minijuegos
   window.snakeGame = new SnakeGame("snake-canvas");
   window.tetrisGame = new TetrisGame("tetris-canvas", "tetris-next-canvas");
-  window.game2048 = new Game2048("grid-2048");
-  window.triviaGame = new TriviaGame();
-  window.memoryGame = new MemoryGame("memory-grid");
   window.idoloGame = new IdoloGame("idolo-game-container");
 
   // Estado de Filtros de Radio
@@ -234,18 +231,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (targetModal) {
         targetModal.style.display = "flex";
         // Renderizar/Comenzar juego específico
-        if (gameId === "idolo") {
-          const frame = document.getElementById("idolo-game-frame");
-          if (frame && (!frame.src || frame.src === "" || frame.src === window.location.href)) {
-            frame.src = frame.dataset.src;
-          }
-        }
-        if (gameId === "idolo-native") window.idoloGame.render();
+        if (gameId === "idolo") window.idoloGame.render();
         if (gameId === "snake") window.snakeGame.start();
         if (gameId === "tetris") window.tetrisGame.start();
-        if (gameId === "2048") window.game2048.restart();
-        if (gameId === "trivia") window.triviaGame.start();
-        if (gameId === "memory") window.memoryGame.restart();
       }
     });
   });
@@ -256,8 +244,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (modal) {
         modal.style.display = "none";
         // Detener loops de juegos para ahorrar CPU
-        if (window.snakeGame.isRunning) window.snakeGame.stop();
-        if (window.tetrisGame.isRunning) window.tetrisGame.stop();
+        if (window.snakeGame && window.snakeGame.isRunning) window.snakeGame.stop();
+        if (window.tetrisGame && window.tetrisGame.isRunning) window.tetrisGame.stop();
       }
     });
   });
@@ -289,46 +277,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if (tetrisRotate) tetrisRotate.addEventListener("click", () => window.tetrisGame.rotateCurrent());
   if (tetrisDrop) tetrisDrop.addEventListener("click", () => window.tetrisGame.hardDrop());
   if (tetrisRestart) tetrisRestart.addEventListener("click", () => window.tetrisGame.start());
-
-  // Controles 2048
-  const btn2048Restart = document.getElementById("2048-restart-btn");
-  const btn2048Undo = document.getElementById("2048-undo-btn");
-  if (btn2048Restart) btn2048Restart.addEventListener("click", () => window.game2048.restart());
-  if (btn2048Undo) btn2048Undo.addEventListener("click", () => window.game2048.undo());
-
-  // Controles Memoria
-  const btnMemoryRestart = document.getElementById("memory-restart-btn");
-  const btnMemoryWinRestart = document.getElementById("memory-win-restart-btn");
-  if (btnMemoryRestart) btnMemoryRestart.addEventListener("click", () => window.memoryGame.restart());
-  if (btnMemoryWinRestart) {
-    btnMemoryWinRestart.addEventListener("click", () => {
-      document.getElementById("memory-win-msg").style.display = "none";
-      window.memoryGame.restart();
-    });
-  }
-
-  // Controles de El Ídolo (Oficial Potrero)
-  const idoloReload = document.getElementById("idolo-reload-btn");
-  if (idoloReload) {
-    idoloReload.addEventListener("click", () => {
-      const frame = document.getElementById("idolo-game-frame");
-      if (frame) {
-        frame.src = frame.dataset.src;
-      }
-    });
-  }
-
-  const idoloFullscreen = document.getElementById("idolo-fullscreen-btn");
-  if (idoloFullscreen) {
-    idoloFullscreen.addEventListener("click", () => {
-      const frame = document.getElementById("idolo-game-frame");
-      if (frame) {
-        if (frame.requestFullscreen) {
-          frame.requestFullscreen();
-        } else if (frame.webkitRequestFullscreen) {
-          frame.webkitRequestFullscreen();
-        }
-      }
-    });
-  }
 });
