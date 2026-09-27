@@ -234,7 +234,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (targetModal) {
         targetModal.style.display = "flex";
         // Renderizar/Comenzar juego específico
-        if (gameId === "idolo") window.idoloGame.render();
+        if (gameId === "idolo") {
+          const frame = document.getElementById("idolo-game-frame");
+          if (frame && (!frame.src || frame.src === "" || frame.src === window.location.href)) {
+            frame.src = frame.dataset.src;
+          }
+        }
+        if (gameId === "idolo-native") window.idoloGame.render();
         if (gameId === "snake") window.snakeGame.start();
         if (gameId === "tetris") window.tetrisGame.start();
         if (gameId === "2048") window.game2048.restart();
@@ -298,6 +304,31 @@ document.addEventListener("DOMContentLoaded", () => {
     btnMemoryWinRestart.addEventListener("click", () => {
       document.getElementById("memory-win-msg").style.display = "none";
       window.memoryGame.restart();
+    });
+  }
+
+  // Controles de El Ídolo (Oficial Potrero)
+  const idoloReload = document.getElementById("idolo-reload-btn");
+  if (idoloReload) {
+    idoloReload.addEventListener("click", () => {
+      const frame = document.getElementById("idolo-game-frame");
+      if (frame) {
+        frame.src = frame.dataset.src;
+      }
+    });
+  }
+
+  const idoloFullscreen = document.getElementById("idolo-fullscreen-btn");
+  if (idoloFullscreen) {
+    idoloFullscreen.addEventListener("click", () => {
+      const frame = document.getElementById("idolo-game-frame");
+      if (frame) {
+        if (frame.requestFullscreen) {
+          frame.requestFullscreen();
+        } else if (frame.webkitRequestFullscreen) {
+          frame.webkitRequestFullscreen();
+        }
+      }
     });
   }
 });
