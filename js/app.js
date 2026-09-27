@@ -1,21 +1,50 @@
 /**
- * Coordinador Principal de la Aplicación: Perú Lounge & Arcade
+ * Coordinador Principal de la Aplicación: WEB.EO (Radios en Vivo & Arcade)
  */
 
+// Stubs de seguridad por si el navegador tiene en caché llamadas a juegos eliminados
+window.Game2048 = window.Game2048 || class { constructor() {} start() {} restart() {} undo() {} };
+window.TriviaGame = window.TriviaGame || class { constructor() {} start() {} };
+window.MemoryGame = window.MemoryGame || class { constructor() {} restart() {} };
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Inicializar Reproductor de Radio
-  window.radioPlayer = new RadioPlayer(RADIOS_DATA);
+  // 1. NAVEGACIÓN ENTRE SECCIONES (TABS PRINCIPALES)
+  // Se inicializa primero para que la interfaz siempre responda inmediatamente
+  const navTabs = document.querySelectorAll(".nav-tab-btn");
+  const tabSections = document.querySelectorAll(".tab-content-section");
 
-  // Inicializar Minijuegos
-  window.snakeGame = new SnakeGame("snake-canvas");
-  window.tetrisGame = new TetrisGame("tetris-canvas", "tetris-next-canvas");
-  window.idoloGame = new IdoloGame("idolo-game-container");
+  function switchTab(targetId) {
+    navTabs.forEach((t) => {
+      if (t.dataset.target === targetId) t.classList.add("active");
+      else t.classList.remove("active");
+    });
+    tabSections.forEach((s) => {
+      if (s.id === targetId) s.style.display = "block";
+      else s.style.display = "none";
+    });
+    if (targetId === "section-favorites") {
+      renderFavorites();
+    }
+  }
 
-  // Estado de Filtros de Radio
+  navTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.target;
+      switchTab(target);
+    });
+  });
+
+  // 2. INICIALIZAR REPRODUCTOR DE RADIO
+  try {
+    window.radioPlayer = new RadioPlayer(typeof RADIOS_DATA !== "undefined" ? RADIOS_DATA : []);
+  } catch (err) {
+    console.error("Error al inicializar RadioPlayer:", err);
+  }
+
+  // 3. ESTADO Y FILTROS DE RADIO
   let currentGenreFilter = "all";
   let searchQuery = "";
 
-  // Renderizar Estaciones
   const stationsGrid = document.getElementById("stations-grid");
   const searchInput = document.getElementById("radio-search-input");
   const filterPills = document.querySelectorAll(".filter-pill");
@@ -24,14 +53,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!stationsGrid) return;
     stationsGrid.innerHTML = "";
 
-    const filtered = RADIOS_DATA.filter((st) => {
+    const data = (typeof RADIOS_DATA !== "undefined") ? RADIOS_DATA : [];
+    const filtered = data.filter((st) => {
       const matchesGenre =
         currentGenreFilter === "all" || st.genre === currentGenreFilter;
+      const q = searchQuery.toLowerCase();
       const matchesSearch =
-        st.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        st.dial.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        st.genreLabel.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        st.slogan.toLowerCase().includes(searchQuery.toLowerCase());
+        !q ||
+        (st.name && st.name.toLowerCase().includes(q)) ||
+        (st.dial && st.dial.toLowerCase().includes(q)) ||
+        (st.genreLabel && st.genreLabel.toLowerCase().includes(q)) ||
+        (st.slogan && st.slogan.toLowerCase().includes(q));
       return matchesGenre && matchesSearch;
     });
 
@@ -46,9 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     filtered.forEach((station) => {
       const isCurrent =
+        window.radioPlayer &&
         window.radioPlayer.currentStation &&
         window.radioPlayer.currentStation.id === station.id;
-      const isFav = window.radioPlayer.isFavorite(station.id);
+      const isFav = window.radioPlayer && typeof window.radioPlayer.isFavorite === "function"
+        ? window.radioPlayer.isFavorite(station.id)
+        : false;
+      const isPlaying = window.radioPlayer && window.radioPlayer.isPlaying;
 
       const card = document.createElement("div");
       card.className = `station-card ${isCurrent ? "active" : ""}`;
@@ -74,45 +110,53 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="station-action">
           <button class="play-station-btn">
             ${
-              isCurrent && window.radioPlayer.isPlaying
+              isCurrent && isPlaying
                 ? `<span>⏸ Pausar</span>`
                 : `<span>▶ Sintonizar</span>`
             }
           </button>
           ${
-            isCurrent && window.radioPlayer.isPlaying
+            isCurrent && isPlaying
               ? `<div class="card-wave"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>`
               : ""
           }
         </div>
       `;
 
-      // Evento de reproducción
       card.querySelector(".play-station-btn").addEventListener("click", (e) => {
         e.stopPropagation();
-        if (isCurrent && window.radioPlayer.isPlaying) {
-          window.radioPlayer.pause();
-        } else {
-          window.radioPlayer.setStation(station, true);
+        if (window.radioPlayer) {
+          if (isCurrent && isPlaying) {
+            window.radioPlayer.pause();
+          } else {
+            window.radioPlayer.setStation(station, true);
+          }
         }
       });
 
       card.addEventListener("click", () => {
-        window.radioPlayer.setStation(station, true);
+        if (window.radioPlayer) {
+          window.radioPlayer.setStation(station, true);
+        }
       });
 
-      // Evento de favorito
       card.querySelector(".station-fav-btn").addEventListener("click", (e) => {
         e.stopPropagation();
-        window.radioPlayer.toggleFavorite(station.id);
+        if (window.radioPlayer) {
+          window.radioPlayer.toggleFavorite(station.id);
+        }
       });
 
       stationsGrid.appendChild(card);
     });
   }
 
-  // Render inicial
-  renderStations();
+  // Render inicial de emisoras
+  try {
+    renderStations();
+  } catch (err) {
+    console.error("Error al renderizar estaciones:", err);
+  }
 
   // Búsqueda en vivo
   if (searchInput) {
@@ -127,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pill.addEventListener("click", () => {
       filterPills.forEach((p) => p.classList.remove("active"));
       pill.classList.add("active");
-      currentGenreFilter = pill.dataset.genre;
+      currentGenreFilter = pill.dataset.genre || "all";
       renderStations();
     });
   });
@@ -145,8 +189,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!favGrid) return;
     favGrid.innerHTML = "";
 
-    const favIds = window.radioPlayer.favorites;
-    const favStations = RADIOS_DATA.filter((s) => favIds.includes(s.id));
+    const favIds = (window.radioPlayer && window.radioPlayer.favorites) || [];
+    const data = (typeof RADIOS_DATA !== "undefined") ? RADIOS_DATA : [];
+    const favStations = data.filter((s) => favIds.includes(s.id));
 
     if (favStations.length === 0) {
       favGrid.innerHTML = `
@@ -182,41 +227,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
       item.querySelector(".play-station-btn").addEventListener("click", (e) => {
         e.stopPropagation();
-        window.radioPlayer.setStation(station, true);
+        if (window.radioPlayer) window.radioPlayer.setStation(station, true);
       });
 
       item.querySelector(".station-fav-btn").addEventListener("click", (e) => {
         e.stopPropagation();
-        window.radioPlayer.toggleFavorite(station.id);
+        if (window.radioPlayer) window.radioPlayer.toggleFavorite(station.id);
       });
 
       favGrid.appendChild(item);
     });
   }
 
-  // Navegación entre secciones (Tabs principales)
-  const navTabs = document.querySelectorAll(".nav-tab-btn");
-  const tabSections = document.querySelectorAll(".tab-content-section");
+  // 4. INICIALIZAR MINIJUEGOS (PROTEGIDOS DE FORMA INDEPENDIENTE)
+  try {
+    if (typeof SnakeGame !== "undefined") {
+      window.snakeGame = new SnakeGame("snake-canvas");
+    }
+  } catch (e) {
+    console.warn("Snake init error:", e);
+  }
 
-  navTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const target = tab.dataset.target;
-      navTabs.forEach((t) => t.classList.remove("active"));
-      tabSections.forEach((s) => (s.style.display = "none"));
+  try {
+    if (typeof TetrisGame !== "undefined") {
+      window.tetrisGame = new TetrisGame("tetris-canvas", "tetris-next-canvas");
+    }
+  } catch (e) {
+    console.warn("Tetris init error:", e);
+  }
 
-      tab.classList.add("active");
-      const activeSection = document.getElementById(target);
-      if (activeSection) {
-        activeSection.style.display = "block";
-      }
+  try {
+    if (typeof IdoloGame !== "undefined") {
+      window.idoloGame = new IdoloGame("idolo-game-container");
+    }
+  } catch (e) {
+    console.warn("Idolo init error:", e);
+  }
 
-      if (target === "section-favorites") {
-        renderFavorites();
-      }
-    });
-  });
-
-  // Selector de Juegos Arcade (Abrir y Cerrar vista de juego)
+  // 5. SELECTOR DE JUEGOS ARCADE (MODALES)
   const gameCards = document.querySelectorAll(".game-launcher-card");
   const gameViews = document.querySelectorAll(".game-active-modal");
   const closeGameBtns = document.querySelectorAll(".close-game-btn");
@@ -224,16 +272,14 @@ document.addEventListener("DOMContentLoaded", () => {
   gameCards.forEach((card) => {
     card.addEventListener("click", () => {
       const gameId = card.dataset.game;
-      // Ocultar modal previo
       gameViews.forEach((v) => (v.style.display = "none"));
 
       const targetModal = document.getElementById(`game-view-${gameId}`);
       if (targetModal) {
         targetModal.style.display = "flex";
-        // Renderizar/Comenzar juego específico
-        if (gameId === "idolo") window.idoloGame.render();
-        if (gameId === "snake") window.snakeGame.start();
-        if (gameId === "tetris") window.tetrisGame.start();
+        if (gameId === "idolo" && window.idoloGame) window.idoloGame.render();
+        if (gameId === "snake" && window.snakeGame) window.snakeGame.start();
+        if (gameId === "tetris" && window.tetrisGame) window.tetrisGame.start();
       }
     });
   });
@@ -243,27 +289,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const modal = btn.closest(".game-active-modal");
       if (modal) {
         modal.style.display = "none";
-        // Detener loops de juegos para ahorrar CPU
         if (window.snakeGame && window.snakeGame.isRunning) window.snakeGame.stop();
         if (window.tetrisGame && window.tetrisGame.isRunning) window.tetrisGame.stop();
       }
     });
   });
 
-  // Botones de control en pantalla para Snake (Móviles)
+  // 6. CONTROLES VIRTUALES TÁCTILES
   const snakePad = document.querySelectorAll("[data-snake-dir]");
   snakePad.forEach((btn) => {
     btn.addEventListener("click", () => {
-      window.snakeGame.changeDirection(btn.dataset.snakeDir);
+      if (window.snakeGame) window.snakeGame.changeDirection(btn.dataset.snakeDir);
     });
   });
 
   const btnSnakeRestart = document.getElementById("snake-restart-btn");
   if (btnSnakeRestart) {
-    btnSnakeRestart.addEventListener("click", () => window.snakeGame.start());
+    btnSnakeRestart.addEventListener("click", () => {
+      if (window.snakeGame) window.snakeGame.start();
+    });
   }
 
-  // Botones de control para Tetris (Móviles)
   const tetrisLeft = document.getElementById("tetris-btn-left");
   const tetrisRight = document.getElementById("tetris-btn-right");
   const tetrisDown = document.getElementById("tetris-btn-down");
@@ -271,10 +317,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const tetrisDrop = document.getElementById("tetris-btn-drop");
   const tetrisRestart = document.getElementById("tetris-restart-btn");
 
-  if (tetrisLeft) tetrisLeft.addEventListener("click", () => window.tetrisGame.moveLeft());
-  if (tetrisRight) tetrisRight.addEventListener("click", () => window.tetrisGame.moveRight());
-  if (tetrisDown) tetrisDown.addEventListener("click", () => window.tetrisGame.drop());
-  if (tetrisRotate) tetrisRotate.addEventListener("click", () => window.tetrisGame.rotateCurrent());
-  if (tetrisDrop) tetrisDrop.addEventListener("click", () => window.tetrisGame.hardDrop());
-  if (tetrisRestart) tetrisRestart.addEventListener("click", () => window.tetrisGame.start());
+  if (tetrisLeft) tetrisLeft.addEventListener("click", () => window.tetrisGame && window.tetrisGame.moveLeft());
+  if (tetrisRight) tetrisRight.addEventListener("click", () => window.tetrisGame && window.tetrisGame.moveRight());
+  if (tetrisDown) tetrisDown.addEventListener("click", () => window.tetrisGame && window.tetrisGame.drop());
+  if (tetrisRotate) tetrisRotate.addEventListener("click", () => window.tetrisGame && window.tetrisGame.rotateCurrent());
+  if (tetrisDrop) tetrisDrop.addEventListener("click", () => window.tetrisGame && window.tetrisGame.hardDrop());
+  if (tetrisRestart) tetrisRestart.addEventListener("click", () => window.tetrisGame && window.tetrisGame.start());
 });

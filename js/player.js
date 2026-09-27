@@ -11,9 +11,18 @@ class RadioPlayer {
     this.audio.preload = "none";
     this.isPlaying = false;
     this.isLoading = false;
-    this.volume = parseFloat(localStorage.getItem("radio_volume") || "0.8");
+    try {
+      this.volume = parseFloat(localStorage.getItem("radio_volume") || "0.8") || 0.8;
+    } catch (e) {
+      this.volume = 0.8;
+    }
     this.audio.volume = this.volume;
-    this.favorites = JSON.parse(localStorage.getItem("radio_favorites") || "[]");
+    try {
+      this.favorites = JSON.parse(localStorage.getItem("radio_favorites") || "[]");
+      if (!Array.isArray(this.favorites)) this.favorites = [];
+    } catch (e) {
+      this.favorites = [];
+    }
     this.sleepTimer = null;
     this.sleepTimeLeft = 0;
     this.sleepInterval = null;
