@@ -1,60 +1,193 @@
 /**
- * EL ÍDOLO: MODO CARRERA DE FUTBOLISTA
- * Juego nativo 100% offline sin dependencias externas.
- * Toma de decisiones, eventos aleatorios, transferencias, títulos, selecciones y retiro.
+ * EL ÍDOLO: MODO CARRERA DE FUTBOLISTA (NATIVO & OFFLINE)
+ * Incluye:
+ * - Camiseta 3D animada con colores, patrones y dorsales del club actual
+ * - Vitrina de Trofeos iluminada con pedestales 3D, reflejos y conteo interactivo
+ * - Eventos de carrera, transferencias, Balón de Oro, Copa del Mundo y Retiro
  */
 
-// Base de datos de Clubes por Categoría y País
+// Base de datos de Clubes con configuración de Camisetas
 const IDOLO_CLUBS = {
   peru_ascenso: [
-    { name: "Santos FC (Nazca)", league: "Liga 2 Perú", tier: 1, country: "🇵🇪" },
-    { name: "Deportivo Coopsol", league: "Liga 2 Perú", tier: 1, country: "🇵🇪" },
-    { name: "Comerciantes FC (Iquitos)", league: "Liga 2 Perú", tier: 1, country: "🇵🇪" },
-    { name: "Juan Aurich", league: "Liga 2 Perú", tier: 1, country: "🇵🇪" }
+    { name: "Santos FC (Nazca)", league: "Liga 2 Perú", tier: 1, country: "🇵🇪", primary: "#1b4332", secondary: "#ffd166", pattern: "solid", numColor: "#ffffff" },
+    { name: "Deportivo Coopsol", league: "Liga 2 Perú", tier: 1, country: "🇵🇪", primary: "#ffbe0b", secondary: "#111111", pattern: "solid", numColor: "#111111" },
+    { name: "Comerciantes FC (Iquitos)", league: "Liga 2 Perú", tier: 1, country: "🇵🇪", primary: "#0077b6", secondary: "#ffffff", pattern: "stripes_vertical", numColor: "#ffffff" },
+    { name: "Juan Aurich", league: "Liga 2 Perú", tier: 1, country: "🇵🇪", primary: "#c1121f", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" }
   ],
   peru_primera: [
-    { name: "Alianza Lima", league: "Liga 1 Perú", tier: 2, country: "🇵🇪" },
-    { name: "Universitario de Deportes", league: "Liga 1 Perú", tier: 2, country: "🇵🇪" },
-    { name: "Sporting Cristal", league: "Liga 1 Perú", tier: 2, country: "🇵🇪" },
-    { name: "FBC Melgar (Arequipa)", league: "Liga 1 Perú", tier: 2, country: "🇵🇪" },
-    { name: "Cienciano (Cusco)", league: "Liga 1 Perú", tier: 2, country: "🇵🇪" },
-    { name: "Sport Boys (Callao)", league: "Liga 1 Perú", tier: 2, country: "🇵🇪" },
-    { name: "Cusco FC", league: "Liga 1 Perú", tier: 2, country: "🇵🇪" }
+    { name: "Alianza Lima", league: "Liga 1 Perú", tier: 2, country: "🇵🇪", primary: "#001b44", secondary: "#ffffff", pattern: "stripes_vertical", numColor: "#ffffff" },
+    { name: "Universitario de Deportes", league: "Liga 1 Perú", tier: 2, country: "🇵🇪", primary: "#fff8dc", secondary: "#7b1113", pattern: "solid", numColor: "#7b1113" },
+    { name: "Sporting Cristal", league: "Liga 1 Perú", tier: 2, country: "🇵🇪", primary: "#38bdf8", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "FBC Melgar (Arequipa)", league: "Liga 1 Perú", tier: 2, country: "🇵🇪", primary: "#ba181b", secondary: "#111111", pattern: "halves", numColor: "#ffffff" },
+    { name: "Cienciano (Cusco)", league: "Liga 1 Perú", tier: 2, country: "🇵🇪", primary: "#d90429", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "Sport Boys (Callao)", league: "Liga 1 Perú", tier: 2, country: "🇵🇪", primary: "#ff70a6", secondary: "#111111", pattern: "solid", numColor: "#111111" },
+    { name: "Cusco FC", league: "Liga 1 Perú", tier: 2, country: "🇵🇪", primary: "#d4af37", secondary: "#111111", pattern: "stripes_horizontal", numColor: "#ffffff" }
   ],
   sudamerica: [
-    { name: "Boca Juniors", league: "Liga Profesional Arg", tier: 3, country: "🇦🇷" },
-    { name: "River Plate", league: "Liga Profesional Arg", tier: 3, country: "🇦🇷" },
-    { name: "Flamengo", league: "Brasileirão", tier: 3, country: "🇧🇷" },
-    { name: "Palmeiras", league: "Brasileirão", tier: 3, country: "🇧🇷" },
-    { name: "São Paulo", league: "Brasileirão", tier: 3, country: "🇧🇷" },
-    { name: "Racing Club", league: "Liga Profesional Arg", tier: 3, country: "🇦🇷" }
+    { name: "Boca Juniors", league: "Liga Profesional Arg", tier: 3, country: "🇦🇷", primary: "#002f6c", secondary: "#ffc72c", pattern: "chest_band", numColor: "#ffc72c" },
+    { name: "River Plate", league: "Liga Profesional Arg", tier: 3, country: "🇦🇷", primary: "#ffffff", secondary: "#e63946", pattern: "diagonal_sash", numColor: "#111111" },
+    { name: "Flamengo", league: "Brasileirão", tier: 3, country: "🇧🇷", primary: "#c1121f", secondary: "#111111", pattern: "stripes_horizontal", numColor: "#ffffff" },
+    { name: "Palmeiras", league: "Brasileirão", tier: 3, country: "🇧🇷", primary: "#006437", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "São Paulo", league: "Brasileirão", tier: 3, country: "🇧🇷", primary: "#ffffff", secondary: "#ba181b", pattern: "chest_band", numColor: "#111111" },
+    { name: "Racing Club", league: "Liga Profesional Arg", tier: 3, country: "🇦🇷", primary: "#60a5fa", secondary: "#ffffff", pattern: "stripes_vertical", numColor: "#001f54" }
   ],
   europa_media: [
-    { name: "Feyenoord", league: "Eredivisie", tier: 4, country: "🇳🇱" },
-    { name: "Benfica", league: "Primeira Liga", tier: 4, country: "🇵🇹" },
-    { name: "Porto", league: "Primeira Liga", tier: 4, country: "🇵🇹" },
-    { name: "Celta de Vigo", league: "LaLiga", tier: 4, country: "🇪🇸" },
-    { name: "Fiorentina", league: "Serie A", tier: 4, country: "🇮🇹" },
-    { name: "Real Betis", league: "LaLiga", tier: 4, country: "🇪🇸" },
-    { name: "Brighton", league: "Premier League", tier: 4, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }
+    { name: "Feyenoord", league: "Eredivisie", tier: 4, country: "🇳🇱", primary: "#c1121f", secondary: "#ffffff", pattern: "halves", numColor: "#111111" },
+    { name: "Benfica", league: "Primeira Liga", tier: 4, country: "🇵🇹", primary: "#dc2626", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "Porto", league: "Primeira Liga", tier: 4, country: "🇵🇹", primary: "#1e3a8a", secondary: "#ffffff", pattern: "stripes_vertical", numColor: "#ffffff" },
+    { name: "Celta de Vigo", league: "LaLiga", tier: 4, country: "🇪🇸", primary: "#93c5fd", secondary: "#ffffff", pattern: "solid", numColor: "#1e3a8a" },
+    { name: "Fiorentina", league: "Serie A", tier: 4, country: "🇮🇹", primary: "#6b21a8", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "Real Betis", league: "LaLiga", tier: 4, country: "🇪🇸", primary: "#16a34a", secondary: "#ffffff", pattern: "stripes_vertical", numColor: "#ffffff" },
+    { name: "Brighton", league: "Premier League", tier: 4, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", primary: "#0284c7", secondary: "#ffffff", pattern: "stripes_vertical", numColor: "#ffffff" }
   ],
   europa_elite: [
-    { name: "Real Madrid", league: "LaLiga", tier: 5, country: "🇪🇸" },
-    { name: "FC Barcelona", league: "LaLiga", tier: 5, country: "🇪🇸" },
-    { name: "Manchester City", league: "Premier League", tier: 5, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-    { name: "Liverpool FC", league: "Premier League", tier: 5, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-    { name: "Bayern Múnich", league: "Bundesliga", tier: 5, country: "🇩🇪" },
-    { name: "Paris Saint-Germain", league: "Ligue 1", tier: 5, country: "🇫🇷" },
-    { name: "Inter de Milán", league: "Serie A", tier: 5, country: "🇮🇹" },
-    { name: "Arsenal FC", league: "Premier League", tier: 5, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }
+    { name: "Real Madrid", league: "LaLiga", tier: 5, country: "🇪🇸", primary: "#ffffff", secondary: "#d4af37", pattern: "solid", numColor: "#d4af37" },
+    { name: "FC Barcelona", league: "LaLiga", tier: 5, country: "🇪🇸", primary: "#004d98", secondary: "#a50044", pattern: "stripes_vertical", numColor: "#ffd700" },
+    { name: "Manchester City", league: "Premier League", tier: 5, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", primary: "#6ba4b8", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "Liverpool FC", league: "Premier League", tier: 5, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", primary: "#b91c1c", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "Bayern Múnich", league: "Bundesliga", tier: 5, country: "🇩🇪", primary: "#dc2626", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "Paris Saint-Germain", league: "Ligue 1", tier: 5, country: "🇫🇷", primary: "#002654", secondary: "#ed2939", pattern: "center_stripe", numColor: "#ffffff" },
+    { name: "Inter de Milán", league: "Serie A", tier: 5, country: "🇮🇹", primary: "#0038a8", secondary: "#111111", pattern: "stripes_vertical", numColor: "#ffd700" },
+    { name: "Arsenal FC", league: "Premier League", tier: 5, country: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", primary: "#dc2626", secondary: "#ffffff", pattern: "raglan", numColor: "#ffffff" }
   ],
   exoticas: [
-    { name: "Al-Hilal", league: "Saudi Pro League", tier: 4, country: "🇸🇦" },
-    { name: "Al-Nassr", league: "Saudi Pro League", tier: 4, country: "🇸🇦" },
-    { name: "Inter Miami", league: "MLS", tier: 3, country: "🇺🇸" },
-    { name: "LA Galaxy", league: "MLS", tier: 3, country: "🇺🇸" }
+    { name: "Al-Hilal", league: "Saudi Pro League", tier: 4, country: "🇸🇦", primary: "#003399", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" },
+    { name: "Al-Nassr", league: "Saudi Pro League", tier: 4, country: "🇸🇦", primary: "#facc15", secondary: "#1e40af", pattern: "solid", numColor: "#1e40af" },
+    { name: "Inter Miami", league: "MLS", tier: 3, country: "🇺🇸", primary: "#f472b6", secondary: "#111111", pattern: "solid", numColor: "#111111" },
+    { name: "LA Galaxy", league: "MLS", tier: 3, country: "🇺🇸", primary: "#ffffff", secondary: "#00245d", pattern: "diagonal_sash", numColor: "#ffd166" }
   ]
 };
+
+// Generador de Dorsal según Posición
+function getPlayerNumber(position) {
+  switch (position) {
+    case "DC": return 9;
+    case "MCO": return 10;
+    case "EXT": return 7;
+    case "MC": return 8;
+    case "DFC": return 4;
+    default: return 10;
+  }
+}
+
+// Extracción del Apellido para la Camiseta
+function getPlayerSurname(fullName) {
+  if (!fullName) return "CRACK";
+  const cleaned = fullName.replace(/['"].*?['"]/g, "").trim();
+  const parts = cleaned.split(" ");
+  return (parts[parts.length - 1] || cleaned || "ÍDOLO").toUpperCase();
+}
+
+// Generador SVG de la Camiseta con Animación y Colores Dinámicos
+function renderJerseySVG(club, playerName, pos) {
+  const pCol = club.primary || "#001b44";
+  const sCol = club.secondary || "#ffffff";
+  const numCol = club.numColor || "#ffffff";
+  const pattern = club.pattern || "solid";
+  const number = getPlayerNumber(pos);
+  const surname = getPlayerSurname(playerName);
+  const randId = "j_" + Math.random().toString(36).substr(2, 6);
+
+  let patternDef = "";
+  let bodyFill = pCol;
+
+  if (pattern === "stripes_vertical") {
+    patternDef = `
+      <pattern id="${randId}_vstripes" width="24" height="20" patternUnits="userSpaceOnUse">
+        <rect width="12" height="20" fill="${pCol}"/>
+        <rect x="12" width="12" height="20" fill="${sCol}"/>
+      </pattern>
+    `;
+    bodyFill = `url(#${randId}_vstripes)`;
+  } else if (pattern === "stripes_horizontal") {
+    patternDef = `
+      <pattern id="${randId}_hstripes" width="20" height="24" patternUnits="userSpaceOnUse">
+        <rect width="20" height="12" fill="${pCol}"/>
+        <rect y="12" width="20" height="12" fill="${sCol}"/>
+      </pattern>
+    `;
+    bodyFill = `url(#${randId}_hstripes)`;
+  }
+
+  let extraShapes = "";
+  if (pattern === "halves") {
+    extraShapes = `<path d="M 80 40 L 80 165 L 116 165 L 116 50 L 128 68 L 145 55 L 125 30 L 105 38 Z" fill="${sCol}"/>`;
+  } else if (pattern === "chest_band") {
+    extraShapes = `<rect x="44" y="80" width="72" height="30" fill="${sCol}"/>`;
+  } else if (pattern === "diagonal_sash") {
+    extraShapes = `<polygon points="44,52 64,52 116,138 116,162 96,162 44,76" fill="${sCol}"/>`;
+  } else if (pattern === "center_stripe") {
+    extraShapes = `<rect x="68" y="42" width="24" height="123" fill="${sCol}"/>`;
+  } else if (pattern === "raglan") {
+    extraShapes = `
+      <polygon points="35,30 15,55 32,68 44,50" fill="${sCol}"/>
+      <polygon points="125,30 145,55 128,68 116,50" fill="${sCol}"/>
+    `;
+  }
+
+  return `
+    <div class="jersey-3d-wrapper">
+      <svg class="jersey-svg" viewBox="0 0 160 180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          ${patternDef}
+          <linearGradient id="${randId}_shading" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
+            <stop offset="45%" stop-color="#ffffff" stop-opacity="0.04"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity="0.48"/>
+          </linearGradient>
+          <filter id="${randId}_shadow" x="-15%" y="-15%" width="135%" height="135%">
+            <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="rgba(0,0,0,0.6)"/>
+          </filter>
+        </defs>
+
+        <g filter="url(#${randId}_shadow)">
+          <!-- Base de la Camiseta con Mangas -->
+          <path d="M 35 30 L 15 55 L 32 68 L 44 50 L 44 165 L 116 165 L 116 50 L 128 68 L 145 55 L 125 30 L 105 38 C 95 48 65 48 55 38 Z" 
+                fill="${bodyFill}" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+
+          <!-- Detalles de Patrón (Franjas, Mitades o Banda) -->
+          ${extraShapes}
+
+          <!-- Sombreado de Textura 3D -->
+          <path d="M 35 30 L 15 55 L 32 68 L 44 50 L 44 165 L 116 165 L 116 50 L 128 68 L 145 55 L 125 30 L 105 38 C 95 48 65 48 55 38 Z" 
+                fill="url(#${randId}_shading)"/>
+
+          <!-- Ribetes en Mangas -->
+          <polygon points="15,55 32,68 30,71 13,58" fill="${sCol}"/>
+          <polygon points="145,55 128,68 130,71 147,58" fill="${sCol}"/>
+
+          <!-- Cuello -->
+          <path d="M 55 38 C 65 48 95 48 105 38 C 97 43 63 43 55 38 Z" fill="${sCol}"/>
+          <path d="M 55 38 Q 80 54 105 38 Q 80 46 55 38 Z" fill="#07080f"/>
+
+          <!-- Escudo del Club en el Pecho -->
+          <g transform="translate(93, 56)">
+            <path d="M 0 0 L 15 0 L 15 11 C 15 17 7.5 21 7.5 21 C 7.5 21 0 17 0 11 Z" fill="${sCol}" stroke="#ffffff" stroke-width="0.8"/>
+            <circle cx="7.5" cy="8.5" r="4.5" fill="${pCol}"/>
+            <text x="7.5" y="10" font-size="4.5" font-weight="900" fill="${numCol}" text-anchor="middle">★</text>
+          </g>
+
+          <!-- Logo Deportivo de Marca -->
+          <path d="M 52 64 Q 57 68 63 62 Q 59 65 54 63 Z" fill="${sCol}" opacity="0.9"/>
+
+          <!-- Apellido del Jugador -->
+          <text x="80" y="78" font-family="'Orbitron', -apple-system, sans-serif" font-size="9" font-weight="900" 
+                letter-spacing="1.2" fill="${numCol}" text-anchor="middle" stroke="#000" stroke-width="0.6">
+            ${surname}
+          </text>
+
+          <!-- Número Dorsal -->
+          <text x="80" y="126" font-family="'Impact', 'Arial Black', sans-serif" font-size="42" font-weight="900" 
+                fill="${numCol}" text-anchor="middle" stroke="#000" stroke-width="1.8">
+            ${number}
+          </text>
+        </g>
+      </svg>
+      <div class="jersey-reflection"></div>
+      <div class="jersey-label">${club.name} • #${number}</div>
+    </div>
+  `;
+}
 
 // Eventos narrativos interactivos y ramificados
 const IDOLO_EVENTS = [
@@ -142,6 +275,8 @@ const IDOLO_EVENTS = [
         effect: (p) => {
           if (Math.random() < 0.5) {
             p.titles += 1;
+            p.leagueTitles = (p.leagueTitles || 0) + 1;
+            p.trophies.push({ id: "t_" + Date.now(), name: `Campeón ${p.club.league}`, year: p.age, club: p.club.name, type: "liga", icon: "🏆" });
             p.fame += 20;
             p.energy -= 25;
             return "¡ÉPICO! Jugaste rengueando, diste una asistencia milagrosa y salieron CAMPEONES. La hinchada te declara ídolo inmortal.";
@@ -197,7 +332,7 @@ const IDOLO_EVENTS = [
         text: "Firmar de inmediato (Asegurar a toda la familia)",
         effect: (p) => {
           p.money += 5000000;
-          p.club = { name: "Al-Hilal", league: "Saudi Pro League", tier: 4, country: "🇸🇦" };
+          p.club = { name: "Al-Hilal", league: "Saudi Pro League", tier: 4, country: "🇸🇦", primary: "#003399", secondary: "#ffffff", pattern: "solid", numColor: "#ffffff" };
           p.fame += 5;
           p.discipline -= 5;
           return "¡Billetera llena! Vives en un palacio en Riyadh y tus bisnietos tienen la vida resuelta, aunque sales del radar europeo.";
@@ -212,52 +347,6 @@ const IDOLO_EVENTS = [
         }
       }
     ]
-  },
-  {
-    id: "reclamo_sueldo",
-    title: "El Club atrasa 3 meses de sueldo",
-    desc: "La dirigencia del club no paga los salarios al plantel desde hace 90 días por crisis económica.",
-    options: [
-      {
-        text: "Liderar una huelga del plantel y exigir los pagos",
-        effect: (p) => {
-          p.discipline -= 5;
-          p.fame += 10;
-          p.money += 30000;
-          return "Tuviste agallas. La directiva cedió ante la presión y tus compañeros te eligen nuevo líder indiscutido.";
-        }
-      },
-      {
-        text: "Rescindir contrato e irte libre a otro equipo",
-        effect: (p) => {
-          p.ovr += 1;
-          return "Hiciste valer tus derechos laborales. Quedaste como agente libre listo para firmar un contrato mejor.";
-        }
-      },
-      {
-        text: "Jugar gratis por amor a la camiseta",
-        effect: (p) => {
-          p.fame += 20;
-          p.money -= 10000;
-          return "Un gesto épico de lealtad. La tribuna te hace una bandera gigante: 'En las buenas y en las malas'.";
-        }
-      }
-    ]
-  },
-  {
-    id: "marca_zapatillas",
-    title: "Patrocinio de Marca Deportiva Mundial",
-    desc: "Nike y Adidas se disputan tus pies para convertirte en su rostro principal en Sudamérica.",
-    options: [
-      {
-        text: "Firmar con botines personalizados y publicidad en TV",
-        effect: (p) => {
-          p.money += 200000;
-          p.fame += 15;
-          return "Tus propios botines personalizados ya están en todas las tiendas. Eres un ícono publicitario.";
-        }
-      }
-    ]
   }
 ];
 
@@ -265,6 +354,7 @@ class IdoloGame {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
     this.state = null;
+    this.newTrophyUnlocked = null;
     this.loadState();
   }
 
@@ -273,6 +363,7 @@ class IdoloGame {
     if (saved) {
       try {
         this.state = JSON.parse(saved);
+        if (!this.state.trophies) this.state.trophies = [];
       } catch (e) {
         this.state = null;
       }
@@ -296,7 +387,6 @@ class IdoloGame {
     ];
     startingClub = allClubs.find((c) => c.name === startingClubName) || IDOLO_CLUBS.peru_primera[0];
 
-    // Stats iniciales
     let baseOvr = 56;
     if (position === "DC") baseOvr = 58;
 
@@ -316,12 +406,15 @@ class IdoloGame {
       assists: 0,
       matches: 0,
       titles: 0,
-      caps: 0,
+      leagueTitles: 0,
+      continentalTitles: 0,
       worldCups: 0,
       ballonDors: 0,
+      goldenBoots: 0,
+      trophies: [],
+      caps: 0,
       isRetired: false,
-      currentEvent: null,
-      seasonLog: []
+      currentEvent: null
     };
 
     this.saveState();
@@ -352,15 +445,15 @@ class IdoloGame {
     this.container.innerHTML = `
       <div class="idolo-card-box setup-box">
         <div class="idolo-hero-header">
-          <span style="font-size: 48px;">⚽</span>
+          <span style="font-size: 52px; animation: bounce 2s infinite;">⚽</span>
           <h2>El Ídolo: Modo Carrera</h2>
-          <p>Comienza a los 16 años en el fútbol sudamericano, toma decisiones clave, gana títulos y decide si te conviertes en estatua o leyenda mundial.</p>
+          <p>Comienza a los 16 años en el fútbol sudamericano, viste la camiseta de tus sueños, llena tu vitrina de trofeos y conviértete en leyenda.</p>
         </div>
 
         <form id="idolo-setup-form" class="idolo-form">
           <div class="idolo-field">
             <label>Nombre de tu Futbolista / Apodo:</label>
-            <input type="text" id="idolo-input-name" placeholder="Ej: Piero 'El Mágico' Quispe" value="Piero Quispe" required>
+            <input type="text" id="idolo-input-name" placeholder="Ej: Piero Quispe" value="Piero Quispe" required>
           </div>
 
           <div class="idolo-row-2">
@@ -380,11 +473,11 @@ class IdoloGame {
             <div class="idolo-field">
               <label>Posición en la cancha:</label>
               <select id="idolo-input-pos">
-                <option value="DC" selected>⚽ Delantero Centro (Goleador)</option>
-                <option value="MCO">🎯 Mediapunta / '10' Creativo</option>
-                <option value="EXT">⚡ Extremo Veloz por las bandas</option>
-                <option value="MC">🧠 Mediocampista de Contención</option>
-                <option value="DFC">🛡️ Defensor Central de Hierro</option>
+                <option value="DC" selected>⚽ Delantero Centro (#9 Goleador)</option>
+                <option value="MCO">🎯 Mediapunta (#10 Creativo)</option>
+                <option value="EXT">⚡ Extremo Veloz (#7 Bandas)</option>
+                <option value="MC">🧠 Mediocampista (#8 Pulmón)</option>
+                <option value="DFC">🛡️ Defensor Central (#4 Hierro)</option>
               </select>
             </div>
           </div>
@@ -438,15 +531,31 @@ class IdoloGame {
   renderDashboard() {
     const p = this.state;
 
-    // Colores según Media OVR
     let ovrColor = "#22e748";
     if (p.ovr >= 85) ovrColor = "#ffd166";
     else if (p.ovr >= 75) ovrColor = "#00f2fe";
 
+    // Alerta de nuevo trofeo ganado
+    let trophyCelebrationHTML = "";
+    if (this.newTrophyUnlocked) {
+      trophyCelebrationHTML = `
+        <div class="trophy-unlocked-banner">
+          <div class="trophy-unlock-icon">${this.newTrophyUnlocked.icon}</div>
+          <div class="trophy-unlock-text">
+            <h4>¡NUEVO TROFEO EN TU VITRINA!</h4>
+            <p><strong>${this.newTrophyUnlocked.name}</strong> con ${this.newTrophyUnlocked.club} (${p.age} años)</p>
+          </div>
+          <button class="trophy-close-pill" onclick="window.idoloGame.dismissTrophyAlert()">✕</button>
+        </div>
+      `;
+    }
+
     this.container.innerHTML = `
+      ${trophyCelebrationHTML}
+
       <div class="idolo-dashboard-grid">
         
-        <!-- Tarjeta de Jugador Principal -->
+        <!-- Tarjeta de Jugador Principal con Camiseta 3D Animada -->
         <div class="idolo-card-box player-card-hud">
           <div class="player-hud-top">
             <div class="player-ovr-badge" style="border-color:${ovrColor}; color:${ovrColor}">
@@ -459,6 +568,11 @@ class IdoloGame {
               <p class="tag-club">🛡️ ${p.club.name} <em>(${p.club.league})</em></p>
             </div>
             <button id="idolo-btn-reset" class="btn-micro" title="Reiniciar carrera">🔄</button>
+          </div>
+
+          <!-- ANIMACIÓN 3D DE LA CAMISETA DEL EQUIPO ACTUAL -->
+          <div class="jersey-card-container">
+            ${renderJerseySVG(p.club, p.name, p.position)}
           </div>
 
           <!-- Barras de Atributos -->
@@ -477,25 +591,35 @@ class IdoloGame {
             </div>
           </div>
 
-          <!-- Palmarés y Cifras -->
+          <!-- Cifras Principales -->
           <div class="player-stats-counter">
             <div class="stat-box"><span>Goles</span><strong>${p.goals}</strong></div>
             <div class="stat-box"><span>Asistencias</span><strong>${p.assists}</strong></div>
             <div class="stat-box"><span>Partidos</span><strong>${p.matches}</strong></div>
-            <div class="stat-box"><span>Títulos</span><strong>🏆 ${p.titles}</strong></div>
             <div class="stat-box"><span>Selección</span><strong>🇵🇪 ${p.caps}</strong></div>
+            <div class="stat-box"><span>Títulos</span><strong style="color:var(--neon-yellow);">🏆 ${p.titles}</strong></div>
             <div class="stat-box"><span>Fortuna</span><strong style="color:#22e748;">$${p.money.toLocaleString()}</strong></div>
           </div>
-
-          ${p.ballonDors > 0 ? `<div class="achievement-pill">⭐ ${p.ballonDors} Balón de Oro ganado</div>` : ""}
-          ${p.worldCups > 0 ? `<div class="achievement-pill gold">🏆 Campeón del Mundo con la Selección</div>` : ""}
         </div>
 
-        <!-- Panel de Decisiones y Temporada -->
+        <!-- Panel de Acciones / Decisiones -->
         <div class="idolo-card-box action-hub">
           ${this.state.currentEvent ? this.renderCurrentEventHTML() : this.renderSeasonActionsHTML()}
         </div>
 
+      </div>
+
+      <!-- VITRINA DE TROFEOS 3D INTERACTIVA -->
+      <div class="idolo-card-box trophy-cabinet-box">
+        <div class="cabinet-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:24px;">🏆</span>
+            <h3>Vitrina de Trofeos Oficial</h3>
+          </div>
+          <span class="cabinet-count-badge">${p.titles} Trofeos Ganados</span>
+        </div>
+
+        ${this.renderTrophyCabinetHTML()}
       </div>
 
       <!-- Historial de Carrera Reciente -->
@@ -511,18 +635,15 @@ class IdoloGame {
     const btnReset = document.getElementById("idolo-btn-reset");
     if (btnReset) btnReset.addEventListener("click", () => this.resetGame());
 
-    // Botón simular temporada
     const btnSimulate = document.getElementById("idolo-btn-advance");
     if (btnSimulate) btnSimulate.addEventListener("click", () => this.advanceSeason());
 
-    // Botones de entrenamiento
     const btnTrainHard = document.getElementById("idolo-train-hard");
     if (btnTrainHard) btnTrainHard.addEventListener("click", () => this.trainPlayer("hard"));
 
     const btnTrainRest = document.getElementById("idolo-train-rest");
     if (btnTrainRest) btnTrainRest.addEventListener("click", () => this.trainPlayer("rest"));
 
-    // Opciones de Evento
     const optButtons = document.querySelectorAll("[data-event-opt]");
     optButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -532,21 +653,111 @@ class IdoloGame {
     });
   }
 
+  // Generador de la Vitrina de Trofeos en Estantes de Cristal
+  renderTrophyCabinetHTML() {
+    const p = this.state;
+    const lTitles = p.leagueTitles || 0;
+    const cTitles = p.continentalTitles || 0;
+    const wCups = p.worldCups || 0;
+    const bDors = p.ballonDors || 0;
+    const gBoots = p.goldenBoots || 0;
+
+    return `
+      <div class="cabinet-showcase">
+        <div class="cabinet-shelf">
+          
+          <!-- Pedestal 1: Ligas Nacionales -->
+          <div class="trophy-pedestal ${lTitles > 0 ? 'unlocked gold-glow' : 'locked'}" title="Torneos de Liga">
+            <div class="trophy-spotlight"></div>
+            <div class="trophy-3d-model">🏆</div>
+            <div class="pedestal-base">
+              <span class="trophy-title">Ligas</span>
+              <span class="trophy-badge-qty">x${lTitles}</span>
+            </div>
+            <div class="pedestal-reflection"></div>
+          </div>
+
+          <!-- Pedestal 2: Copas Continentales (Libertadores / Champions) -->
+          <div class="trophy-pedestal ${cTitles > 0 ? 'unlocked silver-glow' : 'locked'}" title="Copa Continental (Champions / Libertadores)">
+            <div class="trophy-spotlight"></div>
+            <div class="trophy-3d-model">⭐</div>
+            <div class="pedestal-base">
+              <span class="trophy-title">Continental</span>
+              <span class="trophy-badge-qty">x${cTitles}</span>
+            </div>
+            <div class="pedestal-reflection"></div>
+          </div>
+
+          <!-- Pedestal 3: Copa del Mundo FIFA -->
+          <div class="trophy-pedestal ${wCups > 0 ? 'unlocked worldcup-glow' : 'locked'}" title="Copa del Mundo FIFA">
+            <div class="trophy-spotlight"></div>
+            <div class="trophy-3d-model">🌍</div>
+            <div class="pedestal-base">
+              <span class="trophy-title">Mundial</span>
+              <span class="trophy-badge-qty">x${wCups}</span>
+            </div>
+            <div class="pedestal-reflection"></div>
+          </div>
+
+          <!-- Pedestal 4: Balón de Oro -->
+          <div class="trophy-pedestal ${bDors > 0 ? 'unlocked ballondor-glow' : 'locked'}" title="Balón de Oro (Mejor Jugador del Mundo)">
+            <div class="trophy-spotlight"></div>
+            <div class="trophy-3d-model">🌕</div>
+            <div class="pedestal-base">
+              <span class="trophy-title">Balón de Oro</span>
+              <span class="trophy-badge-qty">x${bDors}</span>
+            </div>
+            <div class="pedestal-reflection"></div>
+          </div>
+
+          <!-- Pedestal 5: Bota de Oro -->
+          <div class="trophy-pedestal ${gBoots > 0 ? 'unlocked boot-glow' : 'locked'}" title="Bota de Oro (Máximo Goleador)">
+            <div class="trophy-spotlight"></div>
+            <div class="trophy-3d-model">👟</div>
+            <div class="pedestal-base">
+              <span class="trophy-title">Bota de Oro</span>
+              <span class="trophy-badge-qty">x${gBoots}</span>
+            </div>
+            <div class="pedestal-reflection"></div>
+          </div>
+
+        </div>
+
+        ${p.trophies && p.trophies.length > 0 ? `
+          <div class="trophies-chips-row">
+            ${p.trophies.map(t => `
+              <span class="trophy-chip" title="${t.name} (${t.year} años en ${t.club})">
+                ${t.icon} ${t.name} <small>(${t.club})</small>
+              </span>
+            `).join("")}
+          </div>
+        ` : `
+          <p class="cabinet-empty-note">Aún no has levantado trofeos. ¡Entrena duro, gana partidos y llena tu vitrina de gloria!</p>
+        `}
+      </div>
+    `;
+  }
+
+  dismissTrophyAlert() {
+    this.newTrophyUnlocked = null;
+    this.render();
+  }
+
   renderSeasonActionsHTML() {
     return `
       <div class="season-ready-box">
         <h3>Temporada Año ${this.state.age}</h3>
-        <p>Estás listo para disputar la temporada con <strong>${this.state.club.name}</strong>.</p>
+        <p>Preparado para defender los colores de <strong>${this.state.club.name}</strong>.</p>
         
         <div class="decision-cards-row">
           <button id="idolo-train-hard" class="choice-card">
             <span class="icon">💪</span>
-            <strong>Entrenamiento Fuerte</strong>
+            <strong>Entrenamiento de Élite</strong>
             <small>+2 Media OVR, -12% Energía</small>
           </button>
           <button id="idolo-train-rest" class="choice-card">
             <span class="icon">🛌</span>
-            <strong>Descanso & Fisioterapia</strong>
+            <strong>Fisioterapia & Descanso</strong>
             <small>+25% Energía, previene lesiones</small>
           </button>
         </div>
@@ -604,11 +815,9 @@ class IdoloGame {
     const opt = ev.options[index];
     const outcome = opt.effect(this.state);
 
-    // Guardar en trayectoria
     this.state.careerHistory.push(`${this.state.age} años: ${outcome}`);
     this.state.currentEvent = null;
 
-    // Normalizar estadísticas
     this.state.energy = Math.max(0, Math.min(100, this.state.energy));
     this.state.fame = Math.max(0, Math.min(100, this.state.fame));
     this.state.discipline = Math.max(0, Math.min(100, this.state.discipline));
@@ -619,8 +828,9 @@ class IdoloGame {
 
   advanceSeason() {
     const p = this.state;
+    this.newTrophyUnlocked = null;
 
-    // Generar evento aleatorio en el 70% de las temporadas si no hay evento pendiente
+    // Posible evento narrativo (65% de probabilidad)
     if (!p.currentEvent && Math.random() < 0.65) {
       const randomEvent = IDOLO_EVENTS[Math.floor(Math.random() * IDOLO_EVENTS.length)];
       p.currentEvent = randomEvent;
@@ -628,11 +838,9 @@ class IdoloGame {
       return;
     }
 
-    // Simular estadísticas de la temporada
-    const matchesPlayed = Math.floor(25 + (p.energy / 100) * 15);
+    const matchesPlayed = Math.floor(26 + (p.energy / 100) * 14);
     p.matches += matchesPlayed;
 
-    // Cálculo de goles según posición y OVR
     let seasonGoals = 0;
     let seasonAssists = 0;
 
@@ -650,36 +858,70 @@ class IdoloGame {
     p.goals += seasonGoals;
     p.assists += seasonAssists;
 
-    // Ingresos salariales de temporada
+    // Bota de oro por temporada goleadora monstruosa (30+ goles)
+    if (seasonGoals >= 30) {
+      p.goldenBoots = (p.goldenBoots || 0) + 1;
+      p.titles += 1;
+      const botaTrophy = { id: "t_boot_" + Date.now(), name: "Bota de Oro Máximo Goleador", year: p.age, club: p.club.name, type: "golden_boot", icon: "👟" };
+      p.trophies.push(botaTrophy);
+      p.fame = Math.min(100, p.fame + 15);
+      p.money += 150000;
+      this.newTrophyUnlocked = botaTrophy;
+      p.careerHistory.push(`👟 ¡BOTA DE ORO! Anotaste ${seasonGoals} goles en la temporada.`);
+    }
+
     const salary = Math.round(p.ovr * 1500 * (p.club.tier || 1) * (1 + p.fame / 100));
     p.money += salary;
 
-    // Campeón de liga o copas (probabilidad según OVR del jugador y Tier del club)
+    // Campeón de Liga
     const winTitle = Math.random() < 0.28 + (p.ovr / 250);
     if (winTitle) {
       p.titles += 1;
+      p.leagueTitles = (p.leagueTitles || 0) + 1;
+      const ligaTrophy = { id: "t_" + Date.now(), name: `Campeón ${p.club.league}`, year: p.age, club: p.club.name, type: "liga", icon: "🏆" };
+      p.trophies.push(ligaTrophy);
       p.fame = Math.min(100, p.fame + 10);
-      p.money += 40000;
+      p.money += 45000;
+      this.newTrophyUnlocked = ligaTrophy;
       p.careerHistory.push(`🏆 ¡CAMPEÓN de ${p.club.league} con ${p.club.name}!`);
     }
 
-    // Copa del Mundo cada 4 años (a los 18, 22, 26, 30, 34 años)
+    // Torneo Continental (Copa Libertadores o Champions League)
+    if (p.club.tier >= 3 && Math.random() < 0.22 + (p.ovr / 300)) {
+      p.titles += 1;
+      p.continentalTitles = (p.continentalTitles || 0) + 1;
+      const contName = (p.club.tier >= 4) ? "UEFA Champions League" : "Copa Libertadores";
+      const contTrophy = { id: "t_cont_" + Date.now(), name: contName, year: p.age, club: p.club.name, type: "continental", icon: "⭐" };
+      p.trophies.push(contTrophy);
+      p.fame = Math.min(100, p.fame + 20);
+      p.money += 200000;
+      this.newTrophyUnlocked = contTrophy;
+      p.careerHistory.push(`⭐ ¡GLORIA ETERNA! Conquistaste la ${contName} con ${p.club.name}.`);
+    }
+
+    // Copa del Mundo FIFA (cada 4 años: 18, 22, 26, 30, 34 años)
     if ([18, 22, 26, 30, 34].includes(p.age) && p.ovr >= 70) {
       p.caps += 6;
-      if (Math.random() < 0.18 + (p.ovr / 300)) {
-        p.worldCups += 1;
+      if (Math.random() < 0.20 + (p.ovr / 300)) {
+        p.worldCups = (p.worldCups || 0) + 1;
         p.titles += 1;
         p.fame = 100;
-        p.money += 500000;
-        p.careerHistory.push(`🌟 ¡CAMPEÓN DEL MUNDO! Alzaste la Copa del Mundo con ${p.nationality}. Héroe de la patria.`);
+        p.money += 600000;
+        const wcTrophy = { id: "t_wc_" + Date.now(), name: "Copa del Mundo FIFA", year: p.age, club: p.nationality, type: "mundial", icon: "🌍" };
+        p.trophies.push(wcTrophy);
+        this.newTrophyUnlocked = wcTrophy;
+        p.careerHistory.push(`🌍 ¡CAMPEÓN DEL MUNDO! Alzaste la Copa del Mundo con ${p.nationality}. Héroe de la patria.`);
       }
     }
 
-    // Balón de oro para jugadores de élite (OVR >= 88 en club Tier >= 4)
-    if (p.ovr >= 88 && (p.club.tier || 1) >= 4 && Math.random() < 0.4) {
-      p.ballonDors += 1;
+    // Balón de oro
+    if (p.ovr >= 87 && (p.club.tier || 1) >= 4 && Math.random() < 0.38) {
+      p.ballonDors = (p.ballonDors || 0) + 1;
       p.fame = 100;
-      p.careerHistory.push(`⭐ ¡GANASTE EL BALÓN DE ORO! Coronado el mejor futbolista del planeta Tierra.`);
+      const bdoTrophy = { id: "t_bdo_" + Date.now(), name: "Balón de Oro", year: p.age, club: p.club.name, type: "ballon_dor", icon: "🌕" };
+      p.trophies.push(bdoTrophy);
+      this.newTrophyUnlocked = bdoTrophy;
+      p.careerHistory.push(`🌕 ¡GANASTE EL BALÓN DE ORO! Coronado el mejor futbolista del planeta.`);
     }
 
     // Evolución de media según edad
@@ -690,13 +932,9 @@ class IdoloGame {
       p.energy = Math.max(10, p.energy - 8);
     }
 
-    // Posibles ofertas de fichaje si el jugador subió de nivel
     this.checkForTransfers();
-
-    // Aumento de año
     p.age++;
 
-    // Verificar retiro a los 36+ o si energía cae a 0
     if (p.age >= 37) {
       p.isRetired = true;
       p.careerHistory.push(`🎖️ Se retira del fútbol profesional a los ${p.age - 1} años de edad.`);
@@ -708,13 +946,12 @@ class IdoloGame {
 
   checkForTransfers() {
     const p = this.state;
-    // Si tiene alto OVR y está en club chico, le llegan ofertas gigantes
     if (p.ovr >= 82 && p.club.tier < 5) {
       const elite = IDOLO_CLUBS.europa_elite[Math.floor(Math.random() * IDOLO_CLUBS.europa_elite.length)];
       p.club = elite;
-      p.money += 300000;
+      p.money += 350000;
       p.fame = Math.min(100, p.fame + 20);
-      p.careerHistory.push(`🚀 ¡Fichaje bomba! Traspasado a ${elite.name} (${elite.country}) por cifra récord.`);
+      p.careerHistory.push(`🚀 ¡Fichaje Galáctico! Traspasado a ${elite.name} (${elite.country}).`);
     } else if (p.ovr >= 72 && p.club.tier < 4) {
       const mid = IDOLO_CLUBS.europa_media[Math.floor(Math.random() * IDOLO_CLUBS.europa_media.length)];
       p.club = mid;
@@ -729,7 +966,6 @@ class IdoloGame {
   renderRetirementScreen() {
     const p = this.state;
 
-    // Determinar legado
     let rankTitle = "Obrero del Fútbol";
     let rankDesc = "Una carrera respetable y trabajadora en el fútbol profesional.";
     let statueBadge = "🥉 Estatua de Bronce";
@@ -759,13 +995,26 @@ class IdoloGame {
         <h3 style="font-size:1.6rem; color:#fff;">${rankTitle}</h3>
         <p style="color:var(--text-muted); max-width:550px; margin: 0 auto 20px;">${rankDesc}</p>
 
+        <!-- Última Camiseta Usada -->
+        <div style="max-width:180px; margin: 0 auto 20px;">
+          ${renderJerseySVG(p.club, p.name, p.position)}
+        </div>
+
+        <!-- Vitrina Completa de Trofeos -->
+        <div class="trophy-cabinet-box" style="margin-bottom: 24px;">
+          <h4 style="color:var(--neon-yellow); margin-bottom:12px;">🏆 Vitrina Definitiva de Palmarés (${p.titles} Trofeos)</h4>
+          ${this.renderTrophyCabinetHTML()}
+        </div>
+
         <div class="idolo-summary-card">
           <h4>Resumen de Carrera: ${p.name}</h4>
           <div class="summary-stats-grid">
             <div><span>Partidos:</span> <strong>${p.matches}</strong></div>
             <div><span>Goles:</span> <strong>${p.goals}</strong></div>
             <div><span>Asistencias:</span> <strong>${p.assists}</strong></div>
-            <div><span>Títulos:</span> <strong>${p.titles}</strong></div>
+            <div><span>Títulos Ganados:</span> <strong>🏆 ${p.titles}</strong></div>
+            <div><span>Mundiales Ganados:</span> <strong>🌍 ${p.worldCups || 0}</strong></div>
+            <div><span>Balones de Oro:</span> <strong>🌕 ${p.ballonDors || 0}</strong></div>
             <div><span>Selección:</span> <strong>${p.caps} partidos</strong></div>
             <div><span>Fortuna Final:</span> <strong style="color:#22e748;">$${p.money.toLocaleString()}</strong></div>
           </div>
